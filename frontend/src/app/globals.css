@@ -1,0 +1,360 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light-first markets UI (Yahoo Finance / broker desk inspired) */
+:root {
+  --bg-primary: #f4f5f7;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #eef0f3;
+  --bg-hover: #e8eaee;
+  --border-color: #d5d9e0;
+  --border-strong: #b8bfca;
+
+  --text-primary: #1a1d23;
+  --text-secondary: #4a5563;
+  --text-muted: #6b7280;
+
+  --accent: #e85d04;
+  --accent-hover: #d04f00;
+  --accent-soft: rgba(232, 93, 4, 0.1);
+
+  --up: #0b7a3e;
+  --up-bg: #e6f5ec;
+  --down: #c62828;
+  --down-bg: #fdecea;
+  --warn: #b45309;
+  --warn-bg: #fff7ed;
+
+  --header-h: 56px;
+  --ticker-h: 40px;
+  --radius: 4px;
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --touch-min: 44px;
+}
+
+[data-theme='dark'] {
+  --bg-primary: #0e1116;
+  --bg-surface: #161b22;
+  --bg-surface-elevated: #1c222b;
+  --bg-hover: #242b36;
+  --border-color: #2d3542;
+  --border-strong: #3d4756;
+
+  --text-primary: #e8eaed;
+  --text-secondary: #b0b7c3;
+  --text-muted: #8b93a1;
+
+  --accent: #ff7a1a;
+  --accent-hover: #ff8f3d;
+  --accent-soft: rgba(255, 122, 26, 0.14);
+
+  --up: #3dd68c;
+  --up-bg: rgba(61, 214, 140, 0.12);
+  --down: #f07178;
+  --down-bg: rgba(240, 113, 120, 0.12);
+  --warn: #f0b429;
+  --warn-bg: rgba(240, 180, 41, 0.12);
+}
+
+html, body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  /* clip avoids horizontal scroll without breaking position:fixed/sticky */
+  overflow-x: clip;
+}
+
+/* Fixed chrome — stays visible while page content scrolls */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+.app-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+.app-shell {
+  padding-top: calc(3.5rem + env(safe-area-inset-top, 0px));
+}
+@media (min-width: 768px) {
+  .app-shell {
+    padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+  }
+}
+
+@media (min-width: 768px) {
+  html, body { font-size: 14px; }
+}
+
+.touch-target {
+  min-height: var(--touch-min);
+  min-width: var(--touch-min);
+}
+
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.scroll-x::-webkit-scrollbar { display: none; }
+
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.font-mono, td, th, .num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 12px;
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 12px;
+  z-index: 100;
+  font-weight: 600;
+  font-size: 13px;
+}
+.skip-to-content:focus {
+  top: 8px;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Utility primitives */
+.panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+}
+.panel-head {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-surface-elevated);
+}
+@media (min-width: 768px) {
+  .panel-head {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+  }
+}
+.seg-btn {
+  min-height: 40px;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  border-right: 1px solid var(--border-color);
+}
+.seg-btn:last-child { border-right: 0; }
+@media (min-width: 768px) {
+  .seg-btn {
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  height: auto;
+  padding: 0 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+@media (min-width: 768px) {
+  .btn {
+    min-height: 32px;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+}
+.btn:hover { background: var(--bg-hover); }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn-ghost {
+  border-color: transparent;
+  background: transparent;
+}
+.btn-ghost:hover { background: var(--bg-hover); }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  height: auto;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface-elevated);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+}
+@media (min-width: 768px) {
+  .chip {
+    min-height: 24px;
+    height: 24px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+}
+.chip-active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.up { color: var(--up); }
+.down { color: var(--down); }
+.up-bg { background: var(--up-bg); color: var(--up); }
+.down-bg { background: var(--down-bg); color: var(--down); }
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.data-table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-surface-elevated);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.data-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+.data-table tbody tr {
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+.data-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+.data-table tbody tr.is-selected {
+  background: var(--accent-soft);
+}
+.data-table .right { text-align: right; }
+.data-table .mono { font-family: var(--font-mono); }
+
+/* Stick under fixed header */
+.ticker-bar {
+  position: sticky;
+  top: calc(var(--header-h, 56px) + env(safe-area-inset-top, 0px));
+  z-index: 40;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.ticker-mask {
+  mask-image: linear-gradient(to right, transparent, #000 12px, #000 calc(100% - 12px), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12px, #000 calc(100% - 12px), transparent);
+}
+.ticker-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: marquee 45s linear infinite;
+  will-change: transform;
+}
+.ticker-track.is-paused {
+  animation-play-state: paused;
+}
+/* Pause only for mouse hover — sticky :hover on touch was freezing the banner */
+@media (hover: hover) and (pointer: fine) {
+  .ticker-track:hover { animation-play-state: paused; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+    transform: none;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-surface-elevated) 0%,
+    var(--bg-hover) 50%,
+    var(--bg-surface-elevated) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s ease-in-out infinite;
+}
+@keyframes skeleton-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}
+
+/* Prevent iOS input zoom */
+input, select, textarea {
+  font-size: 16px;
+}
+@media (min-width: 768px) {
+  input, select, textarea {
+    font-size: inherit;
+  }
+}

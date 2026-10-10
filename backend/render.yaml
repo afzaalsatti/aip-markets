@@ -1,0 +1,18 @@
+# Optional Render Blueprint — deploy from repo root or point service at backend/
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: aip-markets-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/v1/system/health
+    envVars:
+      - key: USE_MOCK_LLM_FALLBACK
+        value: "true"
+      - key: USE_MOCK_MARKET_DATA
+        value: "false"
+      - key: CORS_ORIGINS
+        sync: false
+      # Set CORS_ORIGINS in the Render dashboard to your Vercel URL(s)
