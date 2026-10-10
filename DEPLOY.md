@@ -46,7 +46,7 @@ Railway is fine too but is usually **trial credits**, not forever-free.
 |-----|--------|
 | `USE_MOCK_LLM_FALLBACK` | `true` |
 | `USE_MOCK_MARKET_DATA` | `false` |
-| `CORS_ORIGINS` | `http://localhost:3000` *(add your Vercel URL later)* |
+| `CORS_ORIGINS` | `http://localhost:3000` *(plain text, no quotes/brackets; add Vercel URL later)* |
 
 6. Click **Create Web Service** and wait for the first deploy (build can take several minutes — scipy/pandas are heavy).
 7. Copy the service URL, e.g. `https://aip-markets-api.onrender.com`.
